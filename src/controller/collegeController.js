@@ -55,7 +55,65 @@ const isValid= function (value){
         }
     };
 
-module.exports.createCollege=createCollege
+
+
+    const collegeDetails = async function (req, res) {
+        try {
     
+            const queryParams = req.query;
+            const collegeName = queryParams.collegeName
+    
+            if (!isValidRequestBody(queryParams)) {
+                return res
+                    .status(400)
+                    .send({ status: false, message: "please provide inputs for getting college details" });
+            }
+    
+            if (!isValid(collegeName)) {
+                return res
+                    .status(400)
+                    .send({ status: false, message: "please provide collegeName" })
+            }
+    
+            const collegeByCollegeName = await CollegeModel.findOne({ name: collegeName })
+    
+            if (!collegeByCollegeName) {
+                return res
+                    .status(404)
+                    .send({ status: false, message: "Invalid CollegeName" });
+            }
+    
+            const collegeID = collegeByCollegeName._id
+    
+            const getInternsByCollegeID = await InternModel.find({ collegeId: collegeID }).select({_id:1 , email: 1,name: 1, mobile: 1})
+    
+            const { name, fullName, logoLink } = collegeByCollegeName
+    
+            const data = {
+                name: name,
+                fullName: fullName,
+                logoLink: logoLink,
+                interns: getInternsByCollegeID
+            }
+    
+            res
+                .status(200)
+                .send({ status: true, data: data })
+    
+        } catch (error) {
+    
+            res
+                .status(500)
+                .send({ error: error.message })
+    
+        }
+    }
+
+
+
+
+
+module.exports.createCollege=createCollege
+module.exports.collegeDetails = collegeDetails  
     
 
