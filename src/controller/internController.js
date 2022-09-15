@@ -40,7 +40,7 @@ const createIntern = async function (req, res) {
         
         if(!isValid(mobile)) return res.status(400).send({status:false, msg:"plz provide mobile no...!!"})
 
-        if(!/^[6-9]\d{9}$/.test(mobile)) return res.status(400).send({status:false , mag:" plz provide a valid mobilr now...!"})
+        if(!/^[6-9]\d{9}$/.test(mobile)) return res.status(400).send({status:false , mag:" plz provide a valid mobilr no...!"})
         
         const isMobileUnique = await internModel.findOne({mobile})
 

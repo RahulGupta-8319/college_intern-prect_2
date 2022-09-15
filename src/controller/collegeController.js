@@ -1,6 +1,7 @@
 const { mongo, default: mongoose } = require("mongoose")
 const collegeModel = require("../models/collegeModel")
 const internModel = require("../models/internModel")
+const { get } = require("../routes/route")
 
 const isValid = function (value) {
     if (typeof value === 'undefined' || typeof value === null) return false
@@ -57,38 +58,34 @@ const collegeDetails = async function (req, res) {
 
         let collegeName = queryParams.collegeName
 
-        if(!isValidRequestBody(queryParams)) return res.status(400).send({status:false, mag:"plz enter input for getting college details"})
+        if (!isValidRequestBody(queryParams)) return res.status(400).send({ status: false, mag: "plz enter input for getting college details" })
 
-        if(!isValid(collegeName)) return res.status(400).send({status:false, mag:"plz enter college name"})
+        if (!isValid(collegeName)) return res.status(400).send({ status: false, mag: "plz enter college name" })
 
+//************************************************* ******** ************************************************************ */
+        // let collegeBycollegeName = await collegeModel.findOne({ collegeName }).select({ name: 1, fullName: 1, logoLink: 1 }).lean()
 
-        let collegeBycollegeName = await collegeModel.findOne({ collegeName }).select({ name: 1, fullName: 1, logoLink: 1 })
+        //lean() ==> lean query convert bson formate to json formate for that we can do edition in final object(collegebycollegename)
 
+//************************************************************************************************************************************ */
+           const collegeBycollegeName = await collegeModel.findOne({name:collegeName})
 
-        let getInternsByCollegeId = await internModel.find({ collegeId: collegeBycollegeName._id })
+           const collegeId = collegeBycollegeName._id
 
-        delete collegeBycollegeName._id
-
-        res.status(200).send({ status: true, data: collegeBycollegeName, interns: getInternsByCollegeId })
-
-    //    const collegeBycollegeName = await collegeModel.findOne({name:collegeName})
-
-    //    const collegeId = collegeBycollegeName._id
-
-    //    const getInternsByCollegeId = await internModel.find({collegeId}).select({name:1, email:1,mobile:1})
+           const getInternsByCollegeId = await internModel.find({collegeId}).select({name:1, email:1,mobile:1})
 
 
-    //    const {name , fullName, logoLink } = collegeBycollegeName
+           const {name , fullName, logoLink } = collegeBycollegeName
 
-    //    const data = {
-    //               name : name,
-    //               fullName : fullName,
-    //               logoLink : logoLink,
-    //               inter : getInternsByCollegeId
+           const data = {
+                      name : name,
+                      fullName : fullName,
+                      logoLink : logoLink,
+                      inter : getInternsByCollegeId
 
-    //    }
+           }
 
-    //    res.status(200).send({ status: true, data:data})
+           res.status(200).send({ status: true, data:data})
 
     } catch (error) {
         res.status(500).send({ status: false, msg: error.message })
