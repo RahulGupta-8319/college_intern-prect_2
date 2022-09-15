@@ -7,7 +7,7 @@ const collegeSchema = new mongoose.Schema({
         unique : [true, "Name already exits"],
         trim : true 
     },
-    fullname : {
+    fullName : {
         type: String, 
         required : [true, "Full name is required"],
         trim : true
