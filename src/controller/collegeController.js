@@ -98,8 +98,15 @@ const createCollege = async function (req, res) {
 const getCollegeDetails = async function (req, res) {
     try {
 
+        const requestBody = req.body
         const queryParams = req.query;
         const collegeName = queryParams.collegeName
+
+        if(isValidRequestBody(requestBody)){
+            return res
+                .status(400)
+                .send({status:false , message: "invalid request"})
+        }
 
         if (!isValidRequestBody(queryParams)) {
             return res

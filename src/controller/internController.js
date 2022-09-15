@@ -18,7 +18,14 @@ const isValidRequestBody = function(reqBody){
 const createIntern = async function(req,res){
     try{
 
+        const queryParams = req.query
         const requestBody = req.body
+
+        if(isValidRequestBody(queryParams)){
+            return res
+                .status(400)
+                .send({status: false, message: "invalid request"})
+        }
 
         if(!isValidRequestBody(requestBody)){
             return res
@@ -27,6 +34,12 @@ const createIntern = async function(req,res){
         }
 
         const {name, email, mobile , collegeName} = requestBody
+
+        if(Object.keys(requestBody).length > 4){
+            return res
+                .status(400)
+                .send({status:false , message: "invalid data entered inside request body"})
+        }
 
         if(!isValid(name)){
             return res
