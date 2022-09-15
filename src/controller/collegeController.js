@@ -23,7 +23,14 @@ const isValidObjectId = function (objectId) {
 const createCollege = async function (req, res) {
     try {
 
+        const queryParams = req.query
         const requestBody = req.body
+
+        if(isValidRequestBody(queryParams)){
+            return res
+                .status(400)
+                .send({status:false , message:"invalid request"})
+        }
 
         if (!isValidRequestBody(requestBody)) {
             return res
@@ -32,6 +39,12 @@ const createCollege = async function (req, res) {
         }
 
         const { name, fullName, logoLink } = requestBody
+
+        if(Object.keys(requestBody).length > 3){
+            return res
+                .status(400)
+                .send({status:false , message: "invalid data entered inside request body"})
+        }
 
         if (!isValid(name)) {
             return res
