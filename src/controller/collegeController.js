@@ -51,6 +51,12 @@ const createCollege = async function (req, res) {
                 .send({ status: false, message: "LogoLink is required" })
         }
 
+        if(! /(http|https):\/\/.+\.(jpg|jpeg|png)$/.test(logoLink)){
+            return res
+                .status(400)
+                .send({status:false , message:"please provide valid link"})
+        }
+
         const isNameNotUnique = await CollegeModel.findOne({ name: name })
 
         if (isNameNotUnique) {

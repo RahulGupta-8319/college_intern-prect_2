@@ -58,6 +58,7 @@ const createIntern = async function(req,res){
                 .send({status: false , message: "enter a valid mobileNumber"})
         }
 
+        
         if(!isValid(collegeName)){
             return res
                 .status(400)
