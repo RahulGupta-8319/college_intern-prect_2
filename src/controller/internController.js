@@ -69,7 +69,7 @@ const createIntern = async function(req,res){
 
         if(isEmailNotUnique){
             return res
-                .status(400)
+                .status(409)
                 .send({status:false , message: "email already exits"})
         }
 
@@ -77,7 +77,7 @@ const createIntern = async function(req,res){
 
         if(isMobileNumberNotUnique){
             return res
-                .status(400)
+                .status(409)
                 .send({status: false, message:"mobile number already exits"})
         }
 
@@ -85,7 +85,7 @@ const createIntern = async function(req,res){
 
         if(!collegeByCollegeName){
             return res
-                .status(400)
+                .status(404)
                 .send({status:false , message: `no college found by this name: ${collegeName}`})
         }
 
